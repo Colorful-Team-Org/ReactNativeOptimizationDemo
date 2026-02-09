@@ -13,6 +13,9 @@ export async function createOptimizationInstance(): Promise<Optimization> {
     clientId: OPTIMIZATION_CLIENT_ID,
     environment: OPTIMIZATION_ENVIRONMENT,
     logLevel: __DEV__ ? 'info' : 'warn',
+    defaults: {
+      consent: true,
+    },
   });
   return optimization;
 }
