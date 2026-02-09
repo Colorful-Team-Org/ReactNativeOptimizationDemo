@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import Optimization, { OptimizationRoot } from '@contentful/optimization-react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Optimization, { OptimizationRoot } from '@contentful/optimization-react-native';
 import client from './src/contentfulClient';
 import { createOptimizationInstance } from './src/optimizationClient';
-import HomeScreen from './src/screens/HomeScreen';
 import BlogPostDetailScreen from './src/screens/BlogPostDetailScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -69,16 +69,10 @@ export default function App() {
           <Stack.Navigator
             initialRouteName="Home"
             screenOptions={{
-              headerStyle: {
-                backgroundColor: '#ffffff',
-              },
-              headerTintColor: '#0070F3',
-              headerTitleStyle: {
-                fontWeight: '700',
-                fontSize: 18,
-              },
-              headerShadowVisible: false,
-              headerBackButtonDisplayMode: 'minimal',
+              headerShown: false,
+              headerLargeTitle: false,
+              headerTransparent: true,
+              headerTitle: '',
               contentStyle: {
                 backgroundColor: '#ffffff',
               },
@@ -87,16 +81,20 @@ export default function App() {
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{
-                title: 'Contentful Optimized',
-                headerLargeTitle: true,
-              }}
             />
             <Stack.Screen
               name="BlogPostDetail"
               component={BlogPostDetailScreen}
               options={({ route }) => ({
+                headerShown: true,
+                headerTransparent: false,
+                headerLargeTitle: false,
                 title: (route.params as any)?.postTitle ?? 'Blog Post',
+                headerStyle: { backgroundColor: '#ffffff' },
+                headerTintColor: '#0070F3',
+                headerTitleStyle: { fontWeight: '700', fontSize: 18 },
+                headerShadowVisible: false,
+                headerBackButtonDisplayMode: 'minimal',
               })}
             />
           </Stack.Navigator>

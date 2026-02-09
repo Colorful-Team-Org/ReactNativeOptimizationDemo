@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ContentfulDemoBase",
-    "slug": "ContentfulDemoBase",
+    "name": "ContentfulDemoOptimized",
+    "slug": "ContentfulDemoOptimized",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,15 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.afreas.ContentfulDemoOptimized"
     },
-    "android": {
+    "android": {  
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.afreas.ContentfulDemoOptimized"
     },
     "web": {
       "favicon": "./assets/favicon.png"

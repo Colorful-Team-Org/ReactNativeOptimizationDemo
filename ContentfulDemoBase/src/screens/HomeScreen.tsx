@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
   ActivityIndicator,
+  FlatList,
   RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import client, { CTA_ENTRY_ID } from '../contentfulClient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CTAHeader from '../components/CTAHeader';
+import client, { CTA_ENTRY_ID } from '../contentfulClient';
 
 interface BlogPostEntry {
   sys: { id: string; contentType: { sys: { id: string } } };
@@ -26,6 +26,7 @@ interface Props {
 }
 
 export default function HomeScreen({ navigation }: Props) {
+  const insets = useSafeAreaInsets();
   const [cta, setCta] = useState<any>(null);
   const [posts, setPosts] = useState<BlogPostEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,27 +69,27 @@ export default function HomeScreen({ navigation }: Props) {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.centered}>
+      <View style={[styles.centered, { paddingTop: insets.top }]}>
         <ActivityIndicator size="large" color="#0070F3" />
         <Text style={styles.loadingText}>Loading content…</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.centered}>
+      <View style={[styles.centered, { paddingTop: insets.top }]}>
         <Text style={styles.errorEmoji}>⚠️</Text>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={fetchData}>
           <Text style={styles.retryText}>Retry</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <View style={[styles.safeArea, { paddingTop: insets.top }]}>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.sys.id}
@@ -136,7 +137,7 @@ export default function HomeScreen({ navigation }: Props) {
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

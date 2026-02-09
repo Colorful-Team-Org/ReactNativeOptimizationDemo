@@ -67,6 +67,7 @@ Identical UI, but with the **Contentful Optimization SDK** (`@contentful/optimiz
 - **Node.js** >= 18
 - **Expo CLI** (comes with `npx expo`)
 - **Expo Go** app on your phone, _or_ an Android Emulator / iOS Simulator
+- _(Optimized app only)_ **Xcode** with command-line tools (iOS) or **Android Studio** (Android) -- required because the Optimization SDK uses native modules that need to be compiled into a custom dev build
 - A **Contentful Delivery API token** with access to space `k8i80axw1j4b`, environment `react-native-demo`
 - _(Optimized app only)_ An **Optimization SDK client ID**
 
@@ -74,17 +75,25 @@ Identical UI, but with the **Contentful Optimization SDK** (`@contentful/optimiz
 
 ## Setup
 
-### 1. Install dependencies
+### 1. Install dependencies and prebuild
+
+From the repository root, run:
 
 ```bash
-# Base app
-cd ContentfulDemoBase
-npm install
-
-# Optimized app
-cd ../ContentfulDemoOptimized
 npm install
 ```
+
+This automatically installs dependencies for **both** apps (via `postinstall`).
+
+Then run the one-time setup, which prebuilds the native project for the Optimized app:
+
+```bash
+npm start
+```
+
+This runs `expo prebuild` for `ContentfulDemoOptimized`, generating the `ios/` and `android/` native projects and installing CocoaPods. The Optimized app requires a native build because the Optimization SDK depends on native modules (e.g. `@react-native-clipboard/clipboard`) that are not included in Expo Go.
+
+> **Note:** The Base app does not require a native build -- it runs in Expo Go.
 
 ### 2. Configure environment variables
 
@@ -110,16 +119,28 @@ OPTIMIZATION_ENVIRONMENT=react-native-demo
 
 ### 3. Run an app
 
-```bash
-# From either app directory:
-npx expo start
+From the repository root:
 
-# Or target a specific platform directly:
-npx expo start --android
-npx expo start --ios
+```bash
+# Base app (runs in Expo Go -- scan QR code or press 'i' / 'a')
+npm run start:base
+
+# Optimized app (builds native iOS binary and starts)
+npm run start:optimized
+
+# Optimized app (Android)
+npm run start:optimized:android
 ```
 
-Scan the QR code with Expo Go, or press `a` (Android emulator) / `i` (iOS simulator) in the terminal.
+Or from within each app directory:
+
+```bash
+# Base app
+cd ContentfulDemoBase && npx expo start
+
+# Optimized app
+cd ContentfulDemoOptimized && npx expo run:ios
+```
 
 ---
 

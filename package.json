@@ -1,0 +1,13 @@
+{
+  "name": "contentful-react-native-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "cd ContentfulDemoBase && npm install && cd ../ContentfulDemoOptimized && npm install",
+    "prebuild": "cd ContentfulDemoOptimized && npx expo prebuild",
+    "start:base": "cd ContentfulDemoBase && npx expo start",
+    "start:optimized": "cd ContentfulDemoOptimized && npx expo run:ios",
+    "start:optimized:android": "cd ContentfulDemoOptimized && npx expo run:android",
+    "start": "npm run prebuild && echo '\n✅ Setup complete! Start an app with one of:\n\n  npm run start:base                Base app (Expo Go)\n  npm run start:optimized           Optimized app (iOS native build)\n  npm run start:optimized:android   Optimized app (Android native build)\n'"
+  }
+}
