@@ -7,10 +7,12 @@
     "prebuild": "expo prebuild",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "dev": "./scripts/build-and-run.sh",
+    "dev:skip-build": "./scripts/build-and-run.sh --skip-build"
   },
   "dependencies": {
-    "@contentful/optimization-react-native": "0.1.0-alpha",
+    "@contentful/optimization-react-native": "file:../../optimization/platforms/javascript/react-native",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-clipboard/clipboard": "^1.16.3",
     "@react-native-community/netinfo": "^11.5.2",
