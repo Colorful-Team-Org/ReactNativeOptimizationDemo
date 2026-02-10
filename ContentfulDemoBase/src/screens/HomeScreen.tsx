@@ -21,6 +21,13 @@ interface BlogPostEntry {
   };
 }
 
+type CtaPlaceholder = { type: 'cta'; id: string };
+type ListItem = BlogPostEntry | CtaPlaceholder;
+
+function isCtaItem(item: ListItem): item is CtaPlaceholder {
+  return 'type' in item && item.type === 'cta';
+}
+
 interface Props {
   navigation: any;
 }
@@ -91,46 +98,55 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <View style={[styles.safeArea, { paddingTop: insets.top }]}>
       <FlatList
-        data={posts}
-        keyExtractor={(item) => item.sys.id}
-        ListHeaderComponent={
-          <>
-            {cta && <CTAHeader entry={cta} />}
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Blog Posts</Text>
-              <Text style={styles.sectionSubtitle}>
-                {posts.length} post{posts.length !== 1 ? 's' : ''} available
-              </Text>
-            </View>
-          </>
+        data={
+          posts.length > 1
+            ? ([posts[0], { type: 'cta' as const, id: 'cta' }, ...posts.slice(1)] as ListItem[])
+            : (posts as ListItem[])
         }
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            activeOpacity={0.7}
-            onPress={() =>
-              navigation.navigate('BlogPostDetail', {
-                postId: item.sys.id,
-                postTitle: item.fields.title,
-              })
-            }
-          >
-            <View style={styles.cardContent}>
-              <View style={styles.cardIcon}>
-                <Text style={styles.cardIconText}>📝</Text>
+        keyExtractor={(item) => (isCtaItem(item) ? 'cta' : item.sys.id)}
+        ListHeaderComponent={
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Blog Posts</Text>
+            <Text style={styles.sectionSubtitle}>
+              {posts.length} post{posts.length !== 1 ? 's' : ''} available
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) =>
+          isCtaItem(item) ? (
+            cta ? (
+              <View style={styles.ctaWrapper}>
+                <CTAHeader entry={cta} />
               </View>
-              <View style={styles.cardText}>
-                <Text style={styles.cardTitle}>{item.fields.title}</Text>
-                {item.fields.teaser ? (
-                  <Text style={styles.cardTeaser} numberOfLines={2}>
-                    {item.fields.teaser}
-                  </Text>
-                ) : null}
+            ) : null
+          ) : (
+            <TouchableOpacity
+              style={styles.card}
+              activeOpacity={0.7}
+              onPress={() =>
+                navigation.navigate('BlogPostDetail', {
+                  postId: item.sys.id,
+                  postTitle: item.fields.title,
+                })
+              }
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.cardIcon}>
+                  <Text style={styles.cardIconText}>📝</Text>
+                </View>
+                <View style={styles.cardText}>
+                  <Text style={styles.cardTitle}>{item.fields.title}</Text>
+                  {item.fields.teaser ? (
+                    <Text style={styles.cardTeaser} numberOfLines={2}>
+                      {item.fields.teaser}
+                    </Text>
+                  ) : null}
+                </View>
+                <Text style={styles.chevron}>›</Text>
               </View>
-              <Text style={styles.chevron}>›</Text>
-            </View>
-          </TouchableOpacity>
-        )}
+            </TouchableOpacity>
+          )
+        }
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#0070F3" />
@@ -248,5 +264,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 10,
+  },
+  ctaWrapper: {
+    marginHorizontal: 20,
+    marginVertical: 8,
   },
 });

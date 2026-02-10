@@ -1,13 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RichTextRenderer from './RichTextRenderer';
 
 interface CTAHeaderProps {
   entry: {
     fields: {
-      heading: string;
-      body: any; // Rich Text document
-      label: string;
+      heading?: string;
+      body?: any; // Rich Text document
+      label?: string;
+      media?: {
+        fields: {
+          image?: {
+            fields: {
+              file: {
+                url: string;
+              };
+            };
+          };
+        };
+      };
     };
     sys: { id: string };
   };
@@ -15,40 +26,68 @@ interface CTAHeaderProps {
 
 /**
  * CTA header component displayed at the top of the home screen.
- * Renders a callToAction entry: heading, body (rich text), and a label button.
+ * Renders a callToAction entry: image, heading, body (rich text), and a label button.
+ *
+ * The media field is a linked imageWithFocalPoint entry, which itself links to an Asset.
+ * When fetched with sufficient include depth, the chain resolves to:
+ *   entry.fields.media.fields.image.fields.file.url
  */
 export default function CTAHeader({ entry }: CTAHeaderProps) {
-  const { heading, body, label } = entry.fields;
+  const { heading, body, label, media } = entry.fields;
+
+  // Resolve the image URL through the imageWithFocalPoint -> Asset chain
+  const imageUrl = media?.fields?.image?.fields?.file?.url;
+  // Contentful URLs are protocol-relative; prefix with https:
+  const fullImageUrl = imageUrl ? `https:${imageUrl}` : null;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>{heading}</Text>
-      <View style={styles.bodyContainer}>
-        <RichTextRenderer document={body} style={styles.bodyText} />
+      {fullImageUrl && (
+        <Image
+          source={{ uri: fullImageUrl }}
+          style={styles.heroImage}
+          resizeMode="cover"
+        />
+      )}
+      <View style={styles.content}>
+        {heading ? <Text style={styles.heading}>{heading}</Text> : null}
+        {body ? (
+          <View style={styles.bodyContainer}>
+            <RichTextRenderer document={body} style={styles.bodyText} />
+          </View>
+        ) : null}
+        {label ? (
+          <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+            <Text style={styles.buttonText}>{label}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
-      {label ? (
-        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-          <Text style={styles.buttonText}>{label}</Text>
-        </TouchableOpacity>
-      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#0070F3',
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  heroImage: {
+    width: '100%',
+    height: 200,
+  },
+  content: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#0070F3',
   },
   heading: {
     fontSize: 22,
     fontWeight: '800',
     color: '#ffffff',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   bodyContainer: {
-    marginBottom: 12,
+    marginBottom: 14,
   },
   bodyText: {
     fontSize: 14,
@@ -57,8 +96,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'flex-start',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 8,
     backgroundColor: '#ffffff',
   },
