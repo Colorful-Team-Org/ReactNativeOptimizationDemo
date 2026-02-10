@@ -1,9 +1,9 @@
-import { createClient } from 'contentful';
 import {
-  CONTENTFUL_SPACE_ID,
   CONTENTFUL_ACCESS_TOKEN,
   CONTENTFUL_ENVIRONMENT,
+  CONTENTFUL_SPACE_ID,
 } from '@env';
+import { createClient } from 'contentful';
 
 const client = createClient({
   space: CONTENTFUL_SPACE_ID,
@@ -14,4 +14,4 @@ const client = createClient({
 export default client;
 
 // Known entry IDs
-export const CTA_ENTRY_ID = '6wk0RzqTcB8vyj4GsL95zE';
+export const CTA_ENTRY_ID = '5qUxVYOQgdCdCDJ7cenk9s';
