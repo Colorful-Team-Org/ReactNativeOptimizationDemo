@@ -72,6 +72,7 @@ export default function CTAHeader({ entry }: CTAHeaderProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#0070F3',
+    borderRadius: 14,
     overflow: 'hidden',
   },
   heroImage: {
