@@ -14,4 +14,4 @@ const client = createClient({
 export default client;
 
 // Known entry IDs
-export const CTA_ENTRY_ID = '6wk0RzqTcB8vyj4GsL95zE';
+export const CTA_ENTRY_ID = '5qUxVYOQgdCdCDJ7cenk9s';
