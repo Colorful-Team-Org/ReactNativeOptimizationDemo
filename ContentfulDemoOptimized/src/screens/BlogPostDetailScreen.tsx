@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollProvider, Analytics } from '@contentful/optimization-react-native';
+import { OptimizationScrollProvider, Analytics } from '@contentful/optimization-react-native';
 import client from '../contentfulClient';
 import RichTextRenderer from '../components/RichTextRenderer';
 
@@ -68,7 +68,7 @@ export default function BlogPostDetailScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollProvider>
+    <OptimizationScrollProvider>
       {/* Analytics wraps the blog post entry for viewport-based view tracking */}
       <Analytics entry={post}>
         <View style={styles.header}>
@@ -89,7 +89,7 @@ export default function BlogPostDetailScreen({ route, navigation }: Props) {
           )}
         </View>
       </Analytics>
-    </ScrollProvider>
+    </OptimizationScrollProvider>
   );
 }
 
