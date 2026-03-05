@@ -1,4 +1,4 @@
-package com.afreas.ContentfulDemoBase
+package com.afreas.ContentfulDemoOptimized
 
 import android.app.Application
 import android.content.res.Configuration
