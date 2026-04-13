@@ -1,4 +1,4 @@
-import { Analytics, Personalization } from '@contentful/optimization-react-native';
+import { OptimizedEntry } from '@contentful/optimization-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -118,13 +118,13 @@ export default function HomeScreen({ navigation }: Props) {
           isCtaItem(item) ? (
             cta ? (
               <View style={styles.ctaWrapper}>
-                <Personalization baselineEntry={cta} trackTaps>
+                <OptimizedEntry entry={cta} trackTaps>
                   {(resolvedEntry: any) => <CTAHeader entry={resolvedEntry} />}
-                </Personalization>
+                </OptimizedEntry>
               </View>
             ) : null
           ) : (
-            <Analytics entry={item as any}>
+            <OptimizedEntry entry={item as any}>
               <BlogPostCard
                 post={item}
                 onPress={() =>
@@ -134,7 +134,7 @@ export default function HomeScreen({ navigation }: Props) {
                   })
                 }
               />
-            </Analytics>
+            </OptimizedEntry>
           )
         }
         contentContainerStyle={styles.listContent}

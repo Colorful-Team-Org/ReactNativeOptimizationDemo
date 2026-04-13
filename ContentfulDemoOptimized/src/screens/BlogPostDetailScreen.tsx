@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { OptimizationScrollProvider, Analytics } from '@contentful/optimization-react-native';
+import { OptimizationScrollProvider, OptimizedEntry } from '@contentful/optimization-react-native';
 import client from '../contentfulClient';
 import RichTextRenderer from '../components/RichTextRenderer';
 
@@ -69,8 +69,7 @@ export default function BlogPostDetailScreen({ route, navigation }: Props) {
 
   return (
     <OptimizationScrollProvider>
-      {/* Analytics wraps the blog post entry for viewport-based view tracking */}
-      <Analytics entry={post}>
+      <OptimizedEntry entry={post}>
         <View style={styles.header}>
           <Text style={styles.postTitle}>{post?.fields?.title ?? postTitle}</Text>
           {post?.fields?.teaser ? (
@@ -88,7 +87,7 @@ export default function BlogPostDetailScreen({ route, navigation }: Props) {
             </View>
           )}
         </View>
-      </Analytics>
+      </OptimizedEntry>
     </OptimizationScrollProvider>
   );
 }

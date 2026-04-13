@@ -32,8 +32,8 @@ interface CTAHeaderProps {
  * When fetched with sufficient include depth, the chain resolves to:
  *   entry.fields.media.fields.image.fields.file.url
  *
- * Note: personalization with a holdout means some users may see the baseline even
- * when they match a variant. The Personalization component handles this transparently.
+ * Note: optimization with a holdout means some users may see the baseline even
+ * when they match a variant. The OptimizedEntry component handles this transparently.
  */
 export default function CTAHeader({ entry }: CTAHeaderProps) {
   const { heading, body, label, media } = entry.fields;
