@@ -118,7 +118,7 @@ export default function HomeScreen({ navigation }: Props) {
           isCtaItem(item) ? (
             cta ? (
               <View style={styles.ctaWrapper}>
-                <Personalization baselineEntry={cta}>
+                <Personalization baselineEntry={cta} trackTaps>
                   {(resolvedEntry: any) => <CTAHeader entry={resolvedEntry} />}
                 </Personalization>
               </View>
