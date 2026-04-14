@@ -51,7 +51,6 @@ export default function HomeScreen({ navigation }: Props) {
         client.getEntry(CTA_ENTRY_ID, { include: 10 }),
         client.getEntries({
           content_type: 'blogPost',
-          order: ['-fields.title'],
           include: 2,
         }),
       ]);
