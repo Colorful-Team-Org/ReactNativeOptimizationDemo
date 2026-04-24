@@ -12,21 +12,21 @@ Both apps connect to the same Contentful space (`k8i80axw1j4b`, environment `rea
 react-native-demo/
 ├── ContentfulDemoBase/          # Plain Contentful SDK app
 │   ├── App.tsx                  # Navigation setup
-│   ├── src/
-│   │   ├── contentfulClient.ts  # Contentful CDA client + CTA_ENTRY_ID
-│   │   ├── components/          # CTAHeader, RichTextRenderer
-│   │   └── screens/             # HomeScreen, BlogPostDetailScreen
-│   └── .env                     # Contentful credentials
+│   └── src/
+│       ├── contentfulClient.ts  # Contentful CDA client + CTA_ENTRY_ID
+│       ├── components/          # CTAHeader, RichTextRenderer
+│       └── screens/             # HomeScreen, BlogPostDetailScreen
 │
 ├── ContentfulDemoOptimized/     # Optimization SDK app
 │   ├── App.tsx                  # + OptimizationRoot wrapper & preview panel
-│   ├── src/
-│   │   ├── contentfulClient.ts  # Same Contentful CDA client
-│   │   ├── optimizationClient.ts # Optimization SDK initialization
-│   │   ├── components/          # Same components (unchanged)
-│   │   └── screens/             # + Personalization, Analytics, ScrollProvider
-│   └── .env                     # Contentful + Optimization credentials
+│   └── src/
+│       ├── contentfulClient.ts  # Same Contentful CDA client
+│       ├── optimizationClient.ts # Optimization SDK initialization
+│       ├── components/          # Same components (unchanged)
+│       └── screens/             # + Personalization, Analytics, ScrollProvider
 │
+├── scripts/setup.js             # Interactive setup (credentials, SDK source, install, build)
+├── .env                         # Shared Contentful + Optimization credentials (gitignored)
 └── README.md
 ```
 
@@ -75,49 +75,29 @@ Identical UI, but with the **Contentful Optimization SDK** (`@contentful/optimiz
 
 ## Setup
 
-### 1. Install dependencies and prebuild
+### 1. Run the setup script — **start here**
 
-From the repository root, run:
-
-```bash
-npm install
-```
-
-This automatically installs dependencies for **both** apps (via `postinstall`).
-
-Then run the one-time setup, which prebuilds the native project for the Optimized app:
+Fresh clone? This is the only command you need to get the whole repo configured, installed, and built:
 
 ```bash
-npm start
+npm run setup
 ```
 
-This runs `expo prebuild` for `ContentfulDemoOptimized`, generating the `ios/` and `android/` native projects and installing CocoaPods. The Optimized app requires a native build because the Optimization SDK depends on native modules (e.g. `@react-native-clipboard/clipboard`) that are not included in Expo Go.
+The script walks you through:
 
-> **Note:** The Base app does not require a native build -- it runs in Expo Go.
+1. **Environment variables.** Prompts for your Contentful and Optimization credentials. Existing values are shown in `[brackets]` — press enter to keep them. The values are validated against the Contentful Delivery API before anything is written. Output lands in a single shared `.env` at the repo root; both apps load from it via their babel config.
+2. **Optimization SDK source.** Choose one of:
+   - **Latest published release** on npm (default — recommended for most contributors)
+   - **Specific version or commit hash** (e.g. `0.1.0-alpha12`, or a commit SHA that gets rewritten as a `github:contentful/optimization#<sha>` ref)
+   - **Local filesystem checkout** of the optimization monorepo (for SDK development — the script also regenerates `ContentfulDemoOptimized/metro.config.js` with the `watchFolders` and workspace resolver entries needed for local dev)
+3. **Install.** Runs `npm install` in both `ContentfulDemoBase` and `ContentfulDemoOptimized`.
+4. **Build.** Runs `expo prebuild` for the Optimized app, generating the `ios/` and `android/` native projects and installing CocoaPods. The Optimized app needs a native build because the Optimization SDK depends on native modules that are not included in Expo Go.
 
-### 2. Configure environment variables
+The script is **idempotent**: re-running it and pressing enter through every prompt leaves all files unchanged. Use it whenever you want to rotate credentials, switch SDK source, or re-verify that everything is still wired up.
 
-Each app has a `.env` file with placeholders. Fill in your actual credentials.
+> **Note:** The Base app does not require a native build — it runs in Expo Go.
 
-**ContentfulDemoBase/.env**
-
-```env
-CONTENTFUL_SPACE_ID=k8i80axw1j4b
-CONTENTFUL_ACCESS_TOKEN=<your-delivery-api-token>
-CONTENTFUL_ENVIRONMENT=react-native-demo
-```
-
-**ContentfulDemoOptimized/.env**
-
-```env
-CONTENTFUL_SPACE_ID=k8i80axw1j4b
-CONTENTFUL_ACCESS_TOKEN=<your-delivery-api-token>
-CONTENTFUL_ENVIRONMENT=react-native-demo
-OPTIMIZATION_CLIENT_ID=<your-optimization-client-id>
-OPTIMIZATION_ENVIRONMENT=react-native-demo
-```
-
-### 3. Run an app
+### 2. Run an app
 
 From the repository root:
 
